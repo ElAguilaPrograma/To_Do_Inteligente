@@ -1,0 +1,27 @@
+<div class="container" mt-5>
+  <h2 class="mb-4">Inicie Sesíón</h2>
+
+  <form (ngSubmit)="onLogin(loginForm)" #loginForm="ngForm">
+    <div class="mb-3">
+      <input
+             type="email"
+             class="form-control"
+             placeholder="Ingrese su Correo Electronico"
+             required
+             [(ngModel)]="loginData.email"
+             name="email" />
+    </div>
+
+    <div class="mb-3">
+      <input
+             type="password"
+             class="form-control"
+             placeholder="Ingrese su contraseña"
+             required
+             [(ngModel)]="loginData.password"
+             name="password" />
+    </div>
+
+    <button class="btn btn-primary w-100" type="submit">Iniciar Sesión</button> 
+  </form>
+</div>
