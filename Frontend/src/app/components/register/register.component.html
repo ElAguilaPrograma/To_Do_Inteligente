@@ -1,0 +1,46 @@
+<div class="container mt-5">
+    <h2 class="mb-4">Registrate</h2>
+    <form (ngSubmit)="onRegister(registerForm)" #registerForm="ngForm">
+        <div class="mb-3">
+            <input type="text"
+                   class="form-control"
+                   placeholder="Ingrese su nombre de usuario"
+                   required
+                   [(ngModel)]="registerData.userName"
+                   name="username" />
+        </div>
+
+        <div class="mb-3">
+            <input type="email"
+                   class="form-control"
+                   placeholder="Ingrese su correo electronico"
+                   required
+                   [(ngModel)]="registerData.email"
+                   name="email" />
+        </div>
+
+        <div class="mb-3">
+            <input type="password"
+                   class="form-control"
+                   placeholder="Ingrese su contraseña"
+                   required
+                   [(ngModel)]="registerData.password"
+                   name="password" />
+        </div>
+
+        <div class="mb-3">
+            <input type="text"
+                   class="form-control"
+                   placeholder="Ingrese su numero de telefono"
+                   required
+                   [(ngModel)]="registerData.phone"
+                   name="phone" />
+        </div>
+
+        <button class="btn btn-primary w-100" type="submit">Registrarse</button>
+        <a class="btn btn-danger" routerLink="/login">Cancelar</a>
+
+    </form>
+
+    
+</div>

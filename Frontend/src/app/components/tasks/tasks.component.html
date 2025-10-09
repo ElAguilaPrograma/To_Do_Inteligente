@@ -1,0 +1,123 @@
+<div class="container">
+    <h2 class="mb-4">Mis Tareas</h2>
+    <div class="d-flex align-items-center">
+        <h5 class="me-auto mb-0">Tareas Pendientes</h5>
+        <button class="btn btn-outline-dark me-3 mb-1 pulse" matTooltip="Agregar tarea" matTooltipPosition="above" (click)="newTask = !newTask">
+            <i class="bi bi-plus-lg"></i>
+        </button>
+        <button class="btn p-0 border-0 bg-transparent" (click)="showTasksPending = !showTasksPending">
+            <i class="bi bi-caret-down-fill" [class.rotated]="showTasksComplete"></i>
+        </button>
+    </div>
+
+    @if (isLoading){
+        <div class="alert alert-info">Cargando tareas......</div>
+    }
+    @else if (errorMessage){
+        <div class="alert alert-danger">{{ errorMessage }}</div>
+    }
+    @else if (tasks.length === 0){
+        <div class="alert alert-warning">
+            No tienes tareas registradas
+        </div>
+    }
+    @else{
+        @if (showTasksPending == true){
+            <ul class="list-group">
+            @for (task of tasks; track task.taskId){
+                @if (task.isCompleted == false){
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 [class.text-decoration-line-through]="task.isCompleted">{{ task.title }}</h5>
+                            <p class="mb-0">{{ task.description }}</p>
+                        </div>
+                        <div>
+                            Id: {{ task.taskId }}
+                        </div>
+                        <div>
+                            <button class="btn btn-success btn-sm me-2" (click)="completeTask(task.taskId!)">
+                                <i class="bi bi-clipboard2-check"></i>
+                            </button>
+                            <button class="btn btn-primary btn-sm me-2" (click)="openEditSideBar(task)">
+                                <i class="bi bi-pencil-fill"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm me-2" (click)="deleteTask(task.taskId!)">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </li>
+                }
+            }
+            @if (newTask){
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <form (ngSubmit)="createTask(createTaskForm)" #createTaskForm="ngForm">
+                        <div>
+                            <input type="text" class="form-control" placeholder="Title" required [(ngModel)]="taskData.title" name="Title" />
+                        </div>
+                        <div>
+                            <input type="text" class="form-control" placeholder="Description" requiered [(ngModel)]="taskData.description" name="Description" />
+                        </div>
+                        <div>
+                            <button class="btn btn-success btn-sm me-2" type="submit">Agregar</button>
+                            <button class="btn btn-outline-primary btn-sm me-2" type="button" (click)="newTask = false">Cancelar</button>
+                        </div>
+                    </form>
+                </li>
+            }
+            </ul>
+        }
+
+        <div class="d-flex justify-content-between align-content-center">
+            <h5 class="mb-3 mt-3">Tareas Completadas</h5>
+            <button class="btn p-0 border-0 bg-transparent" (click)="showTasksComplete = !showTasksComplete">
+                <i class="bi bi-caret-down-fill" [class.rotated]="showTasksComplete"></i>
+            </button>
+        </div>
+
+        @if (showTasksComplete == true){
+            <ul class="list-group">
+                @for (task of tasks; track task.taskId){
+                    @if (task.isCompleted == true){
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 [class.text-decoration-line-through]="task.isCompleted">{{ task.title }}</h5>
+                                <p class="mb-0">{{ task.description }}</p>
+                            </div>
+                            <div>
+                                Id: {{ task.taskId }}
+                            </div>
+                            <div>
+                                <button class="btn btn-secondary btn-sm me-2" (click)="completeTask(task.taskId!)">
+                                    <i class="bi bi-clipboard2-x"></i>
+                                </button>
+                            </div>
+                        </li>
+                    }
+                }
+            </ul>
+        }
+    }
+
+    <!-- Sidebar de edición-->
+    <div class="sidebar" [class.active]="showSideBar">
+        <div class="sidebar-content">
+            <h4>Editar Tarea</h4>
+            <form (ngSubmit)="updateTask(editTaskForm)" #editTaskForm="ngForm">
+                <div class="mb-3">
+                    <label>Title</label>
+                    <input type="text" class="form-control" [(ngModel)]="selectedTask.title" name="Title" required />
+                </div>
+                <div class="mb-3">
+                    <label>Description</label>
+                    <textarea class="form-control" [(ngModel)]="selectedTask.description" name="Description" required></textarea>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                    <button type="button" class="btn btn-secondary" (click)="closeSideBar()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="overlay" [class.active]="showSideBar" (click)="closeSideBar()"></div>
+</div>

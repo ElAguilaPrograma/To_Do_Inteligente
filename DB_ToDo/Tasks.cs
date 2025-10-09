@@ -19,6 +19,6 @@ namespace DB_ToDo
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public int UserId { get; set; }
         [ForeignKey("UserId")]
-        public virtual Users Users { get; set; }
+        public virtual Users? Users { get; set; }
     }
 }

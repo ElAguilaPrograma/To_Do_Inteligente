@@ -1,0 +1,41 @@
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+.main-container {
+  display: flex;
+  flex: 1;
+  min-height: calc(100vh - 60px); /* 60px = header height */
+  width: 100%;
+  overflow: hidden;
+  background-color: #f8f9fa;
+}
+
+.content-area {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  transition: margin-left 0.3s ease;
+  animation: fadeIn 0.5s ease-in-out;
+  width: 100%;
+}
+
+
+  .content-area.expanded {
+    margin-left: 80px; /* ajusta si sidebar colapsa */
+  }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

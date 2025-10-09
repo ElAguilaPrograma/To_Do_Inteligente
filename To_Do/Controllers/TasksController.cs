@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using To_Do.Servicios;
 
 namespace To_Do.Controllers
@@ -34,11 +35,14 @@ namespace To_Do.Controllers
                 var userId = _servicioUsuarios.ObtenerIdDelUsuario();
                 _logger.LogInformation($"UserId obtenido del token: {userId}");
                 Console.WriteLine($"UserId obtenido del token: {userId}");
+
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+                if (user == null)
+                {
+                    return Unauthorized(new {message = "Usuario no encontrao o no autorizado"});
+                }
                 task.UserId = userId;
-                /*cuando trabajas con relaciones y no necesitas cargar o actualizar la entidad relacionada, 
-                 * siempre es buena idea asignar la propiedad de navegación a null y solo establecer la FK. 
-                 * Esto evita inserciones accidentales. */
-                task.Users = null; // Esta es la propiedad de navegación. Por alguna razon el Entity estaba insertando userId a lo wey, con esto ya no inserta nada
+                task.Users = user;
                 task.CreatedAt = DateTime.UtcNow; 
 
                 _context.Tasks.Add(task);
@@ -49,6 +53,10 @@ namespace To_Do.Controllers
                     message = "Tarea creada correctamente",
                     taskId = task.TaskId
                 });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new {message = ex.Message});
             }
             catch (Exception ex)
             {
@@ -111,6 +119,23 @@ namespace To_Do.Controllers
             }
         }
 
+        [HttpPatch("completetask/{taskId}")]
+        public async Task<IActionResult> CompleteTask(int taskId)
+        {
+            var userId = _servicioUsuarios.ObtenerIdDelUsuario();
+
+            var task = await _context.Tasks.FirstOrDefaultAsync(t => t.TaskId == taskId && t.UserId == userId);
+
+            task.IsCompleted = !task.IsCompleted;
+            await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                message = "Tarea completada con exito",
+                isCompleted = task.IsCompleted
+            });
+        }
+
         [HttpDelete("deletetask/{taskId}")]
         public async Task<IActionResult> DeleteTask(int taskId)
         {
@@ -123,13 +148,13 @@ namespace To_Do.Controllers
 
                 if (task == null)
                 {
-                    return NotFound("Tarea no encontrada");
+                    return NotFound(new { message="Tarea no encontrada" });
                 }
 
                 _context.Tasks.Remove(task);
                 await _context.SaveChangesAsync();
 
-                return Ok("Tarea eliminada correctamente");
+                return Ok(new {message="Tarea eliminada correctamente"});
             }
             catch (Exception ex)
             {
