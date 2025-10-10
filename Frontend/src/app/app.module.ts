@@ -14,6 +14,11 @@ import { HeaderComponent } from './components/header/header.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ConfirmLogoutDialogComponent } from './components/dialog/confirm-logout-dialog/confirm-logout-dialog.component';
+import {MatButtonModule} from '@angular/material/button';
+import { ConfirmDeletetaskDialogComponent } from './components/dialog/confirm-deletetask-dialog/confirm-deletetask-dialog.component';
+
 
 @NgModule({
   declarations: [
@@ -24,15 +29,19 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     LayoutComponent,
     HeaderComponent,
     SidebarComponent,
-    SettingsComponent
+    SettingsComponent,
+    ConfirmLogoutDialogComponent,
+    ConfirmDeletetaskDialogComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    MatTooltipModule
-  ],
+    MatTooltipModule,
+    MatDialogModule,
+    MatButtonModule
+],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,

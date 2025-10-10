@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IRegisterDTO } from '../../models/register.model';
 import { AuthService } from '../../services/auth.service';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -12,7 +13,7 @@ import { NgForm } from '@angular/forms';
 export class RegisterComponent {
   registerData: IRegisterDTO = { userName: "", email: "", password: "", phone: "" }
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   onRegister(form: NgForm) {
     if (form.valid) {
@@ -24,8 +25,13 @@ export class RegisterComponent {
       }
 
       this.authService.register(this.registerData).subscribe({
-        next: (res) => console.log("Registrado con exito", res),
-        error: (err) => console.log("Error al registrar", err)
+        next: (res) => {
+          console.log("Registrado con exito", res);
+        },
+        error: (err) => {
+          console.log("Error al registrar", err)
+          this.router.navigate(["/home"]);
+        }
       })
     }
     else {

@@ -1,5 +1,8 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
+import { ConfirmLogoutDialogComponent } from '../dialog/confirm-logout-dialog/confirm-logout-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -10,7 +13,11 @@ import { AuthService } from '../../services/auth.service';
 export class HeaderComponent {
   @Output() toggleSidebar = new EventEmitter<void>();
 
-  constructor(private authService: AuthService) { }
+  constructor(
+    private authService: AuthService,
+    private dialog: MatDialog,
+    private router: Router
+  ) { }
 
   getToken(): void {
     const token = this.authService.getToken();
@@ -18,8 +25,18 @@ export class HeaderComponent {
   }
 
   LogOut(): void {
-    this.authService.logout();
-    console.log("Saliendo....")
-    window.location.reload();
+    const dialogRef = this.dialog.open(ConfirmLogoutDialogComponent, {
+      width: "350px",
+      disableClose: true,
+      enterAnimationDuration: "200ms",
+      exitAnimationDuration: "150ms"
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.authService.logout();
+        window.location.reload();
+      }
+    })
   }
 }

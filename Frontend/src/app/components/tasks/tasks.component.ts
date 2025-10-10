@@ -3,6 +3,8 @@ import { AuthService } from '../../services/auth.service';
 import { ITask } from '../../models/tasks.models/task.model';
 import { TaskService } from '../../services/task/task.service';
 import { NgForm } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDeletetaskDialogComponent } from '../dialog/confirm-deletetask-dialog/confirm-deletetask-dialog.component';
 
 @Component({
   selector: 'app-tasks',
@@ -20,7 +22,9 @@ export class TasksComponent {
   taskData: ITask = { title: "", isCompleted: false, description: "" }
   showTasksComplete: boolean = true;
   showTasksPending: boolean = true;
-  constructor(private authService: AuthService, private taskService: TaskService) { }
+  noTasks: boolean = false;
+
+  constructor(private authService: AuthService, private taskService: TaskService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.loadTasks();
@@ -89,17 +93,26 @@ export class TasksComponent {
   }
 
   deleteTask(taskId: number): void {
-    if (confirm("¿Estas seguro de eliminar esta tarea?")) {
-      this.taskService.Delete(taskId).subscribe({
-        next: () => {
-          console.log("Tarea eliminado con exito");
-          this.tasks = this.tasks.filter(t => (t as any).taskId !== taskId);
-        },
-        error: (err) => {
-          console.error("Error al eliminar la tarea", err);
-        }
-      })
-    }
+    const dialogRef = this.dialog.open(ConfirmDeletetaskDialogComponent, {
+      width: "350px",
+      disableClose: true,
+      enterAnimationDuration: "200ms",
+      exitAnimationDuration: "150ms"
+    });
+
+    dialogRef.afterClosed().subscribe(res => {
+      if (res) {
+        this.taskService.Delete(taskId).subscribe({
+          next: () => {
+            console.log("Tarea eliminado con exito");
+            this.tasks = this.tasks.filter(t => (t as any).taskId !== taskId);
+          },
+          error: (err) => {
+            console.error("Error al eliminar la tarea", err);
+          }
+        })
+      }
+    })
   }
 
 }
