@@ -48,7 +48,10 @@ namespace To_Do.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return Ok("Usuario registrado correctamente.");
+            return Ok(new
+            {
+                message = "Usuario registrado correctamente"
+            });
         }
 
         // Login

@@ -19,7 +19,7 @@ export class TasksComponent {
   newTask = false;
   showSideBar = false;
   selectedTask: ITask = {title: "", description: "", isCompleted: false}
-  taskData: ITask = { title: "", isCompleted: false, description: "" }
+  taskData: ITask = { title: "", isCompleted: false, description: ""}
   showTasksComplete: boolean = true;
   showTasksPending: boolean = true;
   noTasks: boolean = false;

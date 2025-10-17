@@ -15,7 +15,8 @@ namespace DB_ToDo
         public int TaskId { get; set; }  
         public string Title { get; set; } = string.Empty; //string-Empty hace que el campo no pueda estar vacio
         public bool IsCompleted { get; set; }
-        public string? Description { get; set; } 
+        public string? Description { get; set; }
+        public DateTime? ReminderDate { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public int UserId { get; set; }
         [ForeignKey("UserId")]

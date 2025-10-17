@@ -19,12 +19,14 @@ namespace To_Do.Controllers
         private readonly ToDoContext _context;
         private readonly IServicioUsuarios _servicioUsuarios;
         private readonly ILogger<TasksController> _logger;
+        private readonly NlpService _nlpService;
 
-        public TasksController(ToDoContext toDoContext, IServicioUsuarios servicioUsuarios, ILogger<TasksController> logger)
+        public TasksController(ToDoContext toDoContext, IServicioUsuarios servicioUsuarios, ILogger<TasksController> logger, NlpService nlpService)
         {
             _context = toDoContext;
             _servicioUsuarios = servicioUsuarios;
             _logger = logger;
+            _nlpService = nlpService;
         }
 
         [HttpPost("createtask")]
@@ -41,9 +43,19 @@ namespace To_Do.Controllers
                 {
                     return Unauthorized(new {message = "Usuario no encontrao o no autorizado"});
                 }
+
+                var resultNlp = await _nlpService.AnalyzeTextAsync(task.Title);
+
+                if (resultNlp != null && resultNlp.Reminder_Detected && resultNlp.Full_Date != null)
+                {
+                    if (DateTime.TryParse(resultNlp.Full_Date, out var reminder_date)){
+                        task.ReminderDate = reminder_date;
+                    }
+                }
+
                 task.UserId = userId;
                 task.Users = user;
-                task.CreatedAt = DateTime.UtcNow; 
+                task.CreatedAt = DateTime.UtcNow;
 
                 _context.Tasks.Add(task);
                 await _context.SaveChangesAsync();
@@ -51,7 +63,8 @@ namespace To_Do.Controllers
                 return Ok(new
                 {
                     message = "Tarea creada correctamente",
-                    taskId = task.TaskId
+                    taskId = task.TaskId,
+                    JsonResponse = resultNlp
                 });
             }
             catch (UnauthorizedAccessException ex)
@@ -96,6 +109,15 @@ namespace To_Do.Controllers
                 if (task == null)
                 {
                     return NotFound("Tarea no encontrada");
+                }
+
+                var resultNlp = await _nlpService.AnalyzeTextAsync(request.Title);
+
+                if (resultNlp != null && resultNlp.Reminder_Detected && resultNlp.Full_Date != null)
+                {
+                    if (DateTime.TryParse(resultNlp.Full_Date, out var reminder_date)){
+                        task.ReminderDate = reminder_date;
+                    }
                 }
 
                 //Actualizar los campos deseados

@@ -54,6 +54,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IServicioUsuarios, ServicioUsuarios>();
+builder.Services.AddHttpClient<NlpService>();
 builder.Services.AddDbContext<ToDoContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );

@@ -50,7 +50,7 @@
                             <p class="mb-0">{{ task.description }}</p>
                         </div>
                         <div>
-                            Id: {{ task.taskId }}
+                            <p class="mb-0">{{ task.reminderDate }}</p>
                         </div>
                         <div>
                             <button class="btn btn-success btn-sm me-2" matTooltip="Completar" matTooltipPosition="above" (click)="completeTask(task.taskId!)" (click)="showTasksComplete = true">
