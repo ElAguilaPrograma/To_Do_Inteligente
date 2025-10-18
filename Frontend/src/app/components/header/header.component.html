@@ -1,0 +1,18 @@
+<header class="header d-flex align-items-center justify-content-between px-4">
+    <div class="d-flex align-items-center">
+        <button class="btn btn-outline-light me-3 pulse" (click)="toggleSidebar.emit()">
+            <i class="bi bi-list"></i>
+        </button>
+        <h1 class="app-title">📝 Mi To-Do</h1>
+    </div>
+
+    <div class="actions">
+        <button class="btn btn-outline-light me-3" (click)="getToken()">
+            <i class="bi bi-gear-fill"></i>
+        </button>
+        <button class="btn btn-outline-light" (click)="LogOut()">
+            <i class="bi bi-box-arrow-right"></i>
+        </button>
+    </div>
+</header>
+

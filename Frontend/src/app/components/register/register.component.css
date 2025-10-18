@@ -1,0 +1,200 @@
+/* === Contenedor principal === */
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #007bff, #00b894);
+  padding: 1rem;
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+/* === Tarjeta de registro === */
+.register-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 460px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+  animation: slideUp 0.6s ease-in-out;
+}
+
+.register-card::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: -60px;
+  width: 120px;
+  height: 120px;
+  background: rgba(0, 184, 148, 0.15);
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.register-card::after {
+  content: '';
+  position: absolute;
+  bottom: -50px;
+  right: -50px;
+  width: 100px;
+  height: 100px;
+  background: rgba(0, 184, 148, 0.1);
+  border-radius: 50%;
+  z-index: 0;
+}
+
+/* === Encabezado === */
+.register-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.register-header h2 {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.register-header p {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+/* === Formulario === */
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.form-group {
+  position: relative;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.9rem 2.5rem 0.9rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  outline: none;
+  transition: all 0.3s ease;
+  background-color: #f9f9f9;
+}
+
+.form-control:focus {
+  border-color: #00b894;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(0, 184, 148, 0.15);
+}
+
+.form-group label {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  transition: all 0.3s ease;
+  color: #999;
+}
+
+.form-control:focus + label,
+.form-control:not(:placeholder-shown) + label {
+  top: 0;
+  left: 0.75rem;
+  background: #fff;
+  padding: 0 0.3rem;
+  font-size: 0.75rem;
+  color: #00b894;
+}
+
+.input-icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+  font-size: 1.2rem;
+}
+
+/* === Botón principal === */
+.register-btn {
+  background-color: #00b894;
+  color: #fff;
+  border: none;
+  padding: 0.9rem 1.2rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  width: 100%;
+  box-shadow: 0 4px 10px rgba(0, 184, 148, 0.3);
+}
+
+.register-btn:hover:not(:disabled) {
+  background-color: #009c7a;
+  transform: translateY(-2px);
+}
+
+.register-btn:disabled {
+  background-color: #a8e6cf;
+  cursor: not-allowed;
+}
+
+/* === Footer === */
+.register-footer {
+  margin-top: 2rem;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.register-footer p {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.btn-login {
+  background: transparent;
+  color: #00b894;
+  border: 1px solid #00b894;
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  font-weight: 500;
+  margin-top: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.btn-login:hover {
+  background-color: #00b894;
+  color: white;
+}
+
+/* === Animaciones === */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,71 @@
+<div class="register-container">
+  <div class="register-card">
+    <div class="register-header">
+      <h2>Crea tu cuenta</h2>
+      <p>Completa los campos para registrarte</p>
+    </div>
+
+    <form (ngSubmit)="onRegister(registerForm)" #registerForm="ngForm" class="register-form">
+      <div class="form-group">
+        <input
+          type="text"
+          class="form-control"
+          placeholder=" "
+          required
+          [(ngModel)]="registerData.userName"
+          name="username" />
+        <label>Nombre de usuario</label>
+        <i class="bi bi-person input-icon"></i>
+      </div>
+
+      <div class="form-group">
+        <input
+          type="email"
+          class="form-control"
+          placeholder=" "
+          required
+          [(ngModel)]="registerData.email"
+          name="email" />
+        <label>Correo electrónico</label>
+        <i class="bi bi-envelope input-icon"></i>
+      </div>
+
+      <div class="form-group">
+        <input
+          type="password"
+          class="form-control"
+          placeholder=" "
+          required
+          [(ngModel)]="registerData.password"
+          name="password" />
+        <label>Contraseña</label>
+        <i class="bi bi-lock input-icon"></i>
+      </div>
+
+      <div class="form-group">
+        <input
+          type="text"
+          class="form-control"
+          placeholder=" "
+          required
+          [(ngModel)]="registerData.phone"
+          name="phone" />
+        <label>Teléfono</label>
+        <i class="bi bi-telephone input-icon"></i>
+      </div>
+
+      <button class="register-btn" type="submit" [disabled]="!registerForm.valid" >
+        <span>Registrarse</span>
+        <i class="bi bi-arrow-right"></i>
+      </button>
+
+      <div class="register-footer">
+        <p>¿Ya tienes cuenta?</p>
+        <button class="btn-login" routerLink="/login">
+          Iniciar sesión
+          <i class="bi bi-box-arrow-in-right"></i>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
