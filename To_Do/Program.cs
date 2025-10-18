@@ -1,4 +1,5 @@
 using DB_ToDo;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -52,7 +53,13 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+builder.Services.AddHangfire(config =>
+{
+    config.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+builder.Services.AddHangfireServer();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IServicioUsuarios, ServicioUsuarios>();
 builder.Services.AddHttpClient<NlpService>();
 builder.Services.AddDbContext<ToDoContext>(options =>
@@ -99,6 +106,8 @@ app.UseHttpsRedirection();
 
 //Activar politcas de Cors para "AllowFrontend"
 app.UseCors("AllowFrontend");
+
+app.UseHangfireDashboard("/hangfire");
 
 app.UseAuthorization();
 

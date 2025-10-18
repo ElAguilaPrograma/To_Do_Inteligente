@@ -17,6 +17,7 @@ namespace DB_ToDo
         public bool IsCompleted { get; set; }
         public string? Description { get; set; }
         public DateTime? ReminderDate { get; set; }
+        public string? HangfireJobId { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public int UserId { get; set; }
         [ForeignKey("UserId")]

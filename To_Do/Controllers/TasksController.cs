@@ -1,6 +1,7 @@
 ﻿using Azure.Core;
 using DB_ToDo;
 using DB_ToDo.DTOs;
+using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,13 +21,22 @@ namespace To_Do.Controllers
         private readonly IServicioUsuarios _servicioUsuarios;
         private readonly ILogger<TasksController> _logger;
         private readonly NlpService _nlpService;
+        private readonly INotificationService _notificationService;
+        private readonly IBackgroundJobClient _backgroundJobClient;
 
-        public TasksController(ToDoContext toDoContext, IServicioUsuarios servicioUsuarios, ILogger<TasksController> logger, NlpService nlpService)
+        public TasksController(ToDoContext toDoContext, 
+            IServicioUsuarios servicioUsuarios, 
+            ILogger<TasksController> logger, 
+            NlpService nlpService,
+            INotificationService notificationService,
+            IBackgroundJobClient backgroundJobClient)
         {
             _context = toDoContext;
             _servicioUsuarios = servicioUsuarios;
             _logger = logger;
             _nlpService = nlpService;
+            _notificationService = notificationService;
+            _backgroundJobClient = backgroundJobClient;
         }
 
         [HttpPost("createtask")]
@@ -41,7 +51,7 @@ namespace To_Do.Controllers
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
                 if (user == null)
                 {
-                    return Unauthorized(new {message = "Usuario no encontrao o no autorizado"});
+                    return Unauthorized(new {message = "Usuario no encontrado o no autorizado"});
                 }
 
                 var resultNlp = await _nlpService.AnalyzeTextAsync(task.Title);
@@ -59,6 +69,17 @@ namespace To_Do.Controllers
 
                 _context.Tasks.Add(task);
                 await _context.SaveChangesAsync();
+
+                if (task.ReminderDate.HasValue)
+                {
+                    string jobId = _backgroundJobClient.Schedule(
+                        () => _notificationService.SendReminder(task.Title, task.UserId),
+                        task.ReminderDate.Value
+                    );
+
+                    task.HangfireJobId = jobId;
+                    await _context.SaveChangesAsync();
+                }
 
                 return Ok(new
                 {
@@ -125,6 +146,21 @@ namespace To_Do.Controllers
                 task.Description = request.Description;
                 task.IsCompleted = request.IsCompleted;
 
+                //Si hay job en la tarea lo cancelamos
+                if (!string.IsNullOrEmpty(task.HangfireJobId))
+                {
+                    BackgroundJob.Delete(task.HangfireJobId);
+                }
+
+                if (task.ReminderDate.HasValue)
+                {
+                    string newJobId = _backgroundJobClient.Schedule(
+                        () => _notificationService.SendReminder(task.Title, task.UserId),
+                        task.ReminderDate.Value
+                    );
+                    task.HangfireJobId = newJobId;
+                }
+
                 _context.Update(task);
                 await _context.SaveChangesAsync();
 
@@ -171,6 +207,11 @@ namespace To_Do.Controllers
                 if (task == null)
                 {
                     return NotFound(new { message="Tarea no encontrada" });
+                }
+
+                if (!string.IsNullOrEmpty(task.HangfireJobId))
+                {
+                    BackgroundJob.Delete(task.HangfireJobId);
                 }
 
                 _context.Tasks.Remove(task);

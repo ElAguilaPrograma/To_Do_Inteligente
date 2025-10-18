@@ -31,7 +31,7 @@ import { ConfirmDeletetaskDialogComponent } from './components/dialog/confirm-de
     SidebarComponent,
     SettingsComponent,
     ConfirmLogoutDialogComponent,
-    ConfirmDeletetaskDialogComponent
+    ConfirmDeletetaskDialogComponent,
   ],
   imports: [
     BrowserModule,

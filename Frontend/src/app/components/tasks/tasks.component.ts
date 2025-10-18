@@ -28,6 +28,22 @@ export class TasksComponent {
 
   ngOnInit(): void {
     this.loadTasks();
+    /*
+    Notification.requestPermission().then((result) => {
+        console.log(result)
+      })
+
+      let text = "Cuerpo de la notificación "
+      let img = `${location.origin}/notificaciones.png`
+
+
+      setTimeout(() => {
+        new Notification("Nueva notificación ", {
+          body: text,
+          icon: img
+        })
+      }, 2000)
+      */
   }
 
   loadTasks(): void {
