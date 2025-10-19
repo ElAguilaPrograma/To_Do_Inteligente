@@ -51,7 +51,6 @@ namespace To_Do.Controllers
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
                 if (user == null)
                 {
-                    return Unauthorized(new {message = "Usuario no encontrado o no autorizado"});
                 }
 
                 var resultNlp = await _nlpService.AnalyzeTextAsync(task.Title);

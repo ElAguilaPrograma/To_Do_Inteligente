@@ -33,12 +33,12 @@ export class TasksComponent {
         console.log(result)
       })
 
-      let text = "Cuerpo de la notificación "
+      let text = "Cuerpo de la notificaci�n "
       let img = `${location.origin}/notificaciones.png`
 
 
       setTimeout(() => {
-        new Notification("Nueva notificación ", {
+        new Notification("Nueva notificaci�n ", {
           body: text,
           icon: img
         })
