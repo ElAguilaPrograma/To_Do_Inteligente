@@ -19,5 +19,6 @@ namespace DB_ToDo
         [Required]
         public string Password { get; set; }
         public string? Phone { get; set; }
+
     }
 }
