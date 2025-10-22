@@ -11,6 +11,8 @@ namespace DB_ToDo
 
         public DbSet<Users> Users { get; set; }
         public DbSet<Tasks> Tasks { get; set; }
+        public DbSet<UsersDevice> UsersDevices { get; set; }
+
 
     }
 }

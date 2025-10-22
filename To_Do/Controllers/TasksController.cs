@@ -51,6 +51,7 @@ namespace To_Do.Controllers
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
                 if (user == null)
                 {
+                    return NotFound("Usuario no encontrado");
                 }
 
                 var resultNlp = await _nlpService.AnalyzeTextAsync(task.Title);
@@ -72,7 +73,7 @@ namespace To_Do.Controllers
                 if (task.ReminderDate.HasValue)
                 {
                     string jobId = _backgroundJobClient.Schedule(
-                        () => _notificationService.SendReminder(task.Title, task.UserId),
+                        () => _notificationService.SendReminderAsync(task.Title, task.UserId),
                         task.ReminderDate.Value
                     );
 
@@ -154,7 +155,7 @@ namespace To_Do.Controllers
                 if (task.ReminderDate.HasValue)
                 {
                     string newJobId = _backgroundJobClient.Schedule(
-                        () => _notificationService.SendReminder(task.Title, task.UserId),
+                        () => _notificationService.SendReminderAsync(task.Title, task.UserId),
                         task.ReminderDate.Value
                     );
                     task.HangfireJobId = newJobId;

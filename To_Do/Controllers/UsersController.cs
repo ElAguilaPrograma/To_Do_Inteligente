@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using To_Do.Servicios;
 
 namespace To_Do.Controllers
 {
@@ -18,12 +19,14 @@ namespace To_Do.Controllers
         private readonly ToDoContext _context;
         private readonly IConfiguration _config;
         private readonly IPasswordHasher<Users> _passwordHasher;
+        private readonly IServicioUsuarios _servicioUsuarios;
 
-        public UsersController(ToDoContext toDoContext, IConfiguration configuration, IPasswordHasher<Users> passwordHasher)
+        public UsersController(ToDoContext toDoContext, IConfiguration configuration, IPasswordHasher<Users> passwordHasher, IServicioUsuarios servicioUsuarios)
         {
             _context = toDoContext;
             _config = configuration;
             _passwordHasher = passwordHasher;
+            _servicioUsuarios = servicioUsuarios;
         }
 
         [HttpPost("register")]
