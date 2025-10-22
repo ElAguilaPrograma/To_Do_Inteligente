@@ -19,6 +19,11 @@ import { ConfirmLogoutDialogComponent } from './components/dialog/confirm-logout
 import {MatButtonModule} from '@angular/material/button';
 import { ConfirmDeletetaskDialogComponent } from './components/dialog/confirm-deletetask-dialog/confirm-deletetask-dialog.component';
 
+// Importar modulos de Firebase para angular 19
+
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireMessagingModule } from '@angular/fire/compat/messaging';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -40,7 +45,11 @@ import { ConfirmDeletetaskDialogComponent } from './components/dialog/confirm-de
     HttpClientModule,
     MatTooltipModule,
     MatDialogModule,
-    MatButtonModule
+    MatButtonModule,
+    // Inicializar Firebase App y Firebase Messaging
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireMessagingModule
+
 ],
   providers: [
     {

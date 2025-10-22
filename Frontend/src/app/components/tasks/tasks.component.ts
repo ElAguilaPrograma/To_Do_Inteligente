@@ -5,12 +5,14 @@ import { TaskService } from '../../services/task/task.service';
 import { NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDeletetaskDialogComponent } from '../dialog/confirm-deletetask-dialog/confirm-deletetask-dialog.component';
+import { MessagingService } from '../../services/messaging.service';
 
 @Component({
   selector: 'app-tasks',
   standalone: false,
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.css',
+  template: `<h1>Push Notifications Angular + Firebase</h1>`,
 })
 export class TasksComponent {
   tasks: ITask[] = [];
@@ -24,10 +26,15 @@ export class TasksComponent {
   showTasksPending: boolean = true;
   noTasks: boolean = false;
 
-  constructor(private authService: AuthService, private taskService: TaskService, private dialog: MatDialog) { }
+  constructor(
+    private authService: AuthService, 
+    private taskService: TaskService, 
+    private dialog: MatDialog,
+    private messagingService: MessagingService) { }
 
   ngOnInit(): void {
     this.loadTasks();
+    this.messagingService.requestPermission();
     /*
     Notification.requestPermission().then((result) => {
         console.log(result)
